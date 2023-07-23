@@ -1,4 +1,4 @@
-import 'package:flutter/gestures.dart';
+ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formkey = GlobalKey<FormState>();
   bool passwordIcon = true;
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           else if(!value.endsWith("@gmail.com")){
                             return "Please Enter Valid Gmail";
                           }
+                          else if(!value.contains(RegExp(r'[0-9]'))){
+                            return "Please Enter a Number in Mail";
+                          }
                           else{
                             return null;
                           }
@@ -98,14 +100,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 57,
                       child: TextFormField(
                         validator: (value){
-                          if(value == null || value.isEmpty){
-                            return "Please Enter Email";
-                          }
-                          else{
+                          if (value == null || value.isEmpty) {
+                            return "Please Enter Password";
+                          } else if (value.length < 8) {
+                            return "Password must be at least 8 characters long";
+                          } else if (value.length > 32) {
+                            return "Password cannot exceed 32 characters";
+                          } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                            return "Password must contain at least one uppercase letter";
+                          } else if (!value.contains(RegExp(r'[a-z]'))) {
+                            return "Password must contain at least one lowercase letter";
+                          } else if (!value.contains(RegExp(r'[0-9]'))) {
+                            return "Password must contain at least one number";
+                          } else if (!value.contains(RegExp(r'[!@#\$%^&*()_+=]'))) {
+                            return "Password must contain at least one special character like !@#\$%^&*()_+=";
+                          } else if (value.contains(RegExp(r'\s'))) {
+                            return "Password cannot contain spaces";
+                          } else if (value.contains("password")) {
+                            return "Avoid using common words like 'password' in your password";
+                          } else {
                             return null;
                           }
                         },
-
                         obscureText: passwordIcon,
                         decoration: InputDecoration(
                             suffixIcon: IconButton(

@@ -22,6 +22,16 @@ class _SigninScreenState extends State<SigninScreen> {
   TextEditingController cpasswordController = TextEditingController();
 
 
+  bool _isValidPhoneNumber(String value) {
+    return RegExp(r'^\d{10}$').hasMatch(value);
+  }
+
+  bool _isValidEmail(String value) {
+    // Use a regular expression for email validation based on the RFC 5322 specification
+    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value);
+  }
+
+
   bool passwordIcon = true;
   bool npasswordIcon = true;
 
@@ -68,6 +78,9 @@ class _SigninScreenState extends State<SigninScreen> {
                           if(value == null || value.isEmpty){
                             return "Please Enter Name";
                           }
+                          else if (value.contains(RegExp(r'\s'))) {
+                            return "Password cannot contain spaces";
+                          }
                           else{
                             return null;
                           }
@@ -105,14 +118,14 @@ class _SigninScreenState extends State<SigninScreen> {
                     SizedBox(
                       height: 57,
                       child: TextFormField(
-                        validator: (value){
-                          if(value == null || value.isEmpty){
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
                             return "Please Enter Email";
-                          }
-                          else if(!value.endsWith("@gmail.com")){
-                            return "Please Enter Valid Gmail";
-                          }
-                          else{
+                          } else if (!_isValidEmail(value)) {
+                            return "Please Enter a Valid Email Address";
+                          } else if (!value.contains(RegExp(r'[0-9]'))){
+                            return "Please Enter a least One Number";
+                          } else{
                             return null;
                           }
                         },
@@ -151,13 +164,13 @@ class _SigninScreenState extends State<SigninScreen> {
                         keyboardType: TextInputType.phone,
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(10),
-
                         ],
-                        validator: (value){
-                          if(value == null || value.isEmpty){
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
                             return "Please Enter Phone Number";
-                          }
-                          else{
+                          } else if (!_isValidPhoneNumber(value)) {
+                            return "Invalid phone number. Please use a valid phone number format.";
+                          } else {
                             return null;
                           }
                         },
@@ -196,15 +209,28 @@ class _SigninScreenState extends State<SigninScreen> {
                       child: TextFormField(
                         controller: passwordController,
                         validator: (value){
-                          if(value == null || value.isEmpty){
+                          if (value == null || value.isEmpty) {
                             return "Please Enter Password";
-                          }
-
-                          else{
+                          } else if (value.length < 8) {
+                            return "Password must be at least 8 characters long";
+                          } else if (value.length > 32) {
+                            return "Password cannot exceed 32 characters";
+                          } else if (!value.contains(RegExp(r'[A-Z]'))) {
+                            return "Password must contain at least one uppercase letter";
+                          } else if (!value.contains(RegExp(r'[a-z]'))) {
+                            return "Password must contain at least one lowercase letter";
+                          } else if (!value.contains(RegExp(r'[0-9]'))) {
+                            return "Password must contain at least one number";
+                          } else if (!value.contains(RegExp(r'[!@#\$%^&*()_+=]'))) {
+                            return "Password must contain at least one special character like !@#\$%^&*()_+=";
+                          } else if (value.contains(RegExp(r'\s'))) {
+                            return "Password cannot contain spaces";
+                          } else if (value.contains("password")) {
+                            return "Avoid using common words like 'password' in your password";
+                          } else {
                             return null;
                           }
                         },
-
                         obscureText: passwordIcon,
                         decoration: InputDecoration(
                             suffixIcon: IconButton(
