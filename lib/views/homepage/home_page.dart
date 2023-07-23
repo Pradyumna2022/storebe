@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:storebobypradyumna/constant/constant.dart';
 import 'package:storebobypradyumna/widgets/search_widget.dart';
 
+import 'candy_and_snacks.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -194,7 +196,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      Text("hfdhsf"),
+      CandyAndSnacks(),
       Text("hfdhsf"),
       Text("hfdhsf"),
       Text("hfdhsf"),

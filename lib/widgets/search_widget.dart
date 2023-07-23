@@ -65,7 +65,7 @@ class _SearchWidgetState extends State<SearchWidget>{
             ),
           ),
         ),
-        Image.asset('assets/images/fileter.png'),
+        Image.asset('assets/images/filter.png'),
 
       ],
     );
